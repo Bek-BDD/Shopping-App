@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: PRODUCTSERVICE
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/shoppingdb
+
+
+server:
+  port: 8085
