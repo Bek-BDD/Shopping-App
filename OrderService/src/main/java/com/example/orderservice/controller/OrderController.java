@@ -4,6 +4,7 @@ import com.example.orderservice.repository.OrderRepo;
 import com.example.orderservice.service.OrderService;
 import com.example.orderservice.service.dto.OrderRequestDto;
 import com.example.orderservice.service.dto.OrderResponseDto;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
+@AllArgsConstructor
 public class OrderController {
     private OrderService orderService;
 
