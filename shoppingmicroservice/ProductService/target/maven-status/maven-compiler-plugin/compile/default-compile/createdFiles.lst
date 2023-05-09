@@ -1,0 +1,10 @@
+com\example\productservice\service\Adapter\ProductMapper.class
+com\example\productservice\service\Dto\ProductRequestDto.class
+com\example\productservice\controller\ProductController.class
+com\example\productservice\ProductServiceApplication.class
+com\example\productservice\service\Adapter\ProductMapperImpl.class
+com\example\productservice\repository\ProductRepo.class
+com\example\productservice\model\Product.class
+com\example\productservice\service\Impl\ProductServiceImpl.class
+com\example\productservice\service\Dto\ProductResponseDto.class
+com\example\productservice\service\ProductService.class
