@@ -4,20 +4,19 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.kafka.common.record.UnalignedMemoryRecords;
 
-import java.util.List;
-
-@Entity
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "orderTable")
-public class Order {
+@Table(name="order_line")
+public class OrderLineItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderId;
-    private String orderNumber;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn
-    private List<OrderLineItem> orderLineItems;
+    private int orderLineId;
+    private int quantity;
+    private String skuCode;
+    private double price;
+
 }
