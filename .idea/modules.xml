@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/shoppingmicroservice/InventoryService/InventoryService.iml" filepath="$PROJECT_DIR$/shoppingmicroservice/InventoryService/InventoryService.iml" />
       <module fileurl="file://$PROJECT_DIR$/shoppingmicroservice/OrderService/OrderService.iml" filepath="$PROJECT_DIR$/shoppingmicroservice/OrderService/OrderService.iml" />
       <module fileurl="file://$PROJECT_DIR$/shoppingmicroservice/ProductService/ProductService.iml" filepath="$PROJECT_DIR$/shoppingmicroservice/ProductService/ProductService.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/Shopping App.iml" filepath="$PROJECT_DIR$/.idea/Shopping App.iml" />
       <module fileurl="file://$PROJECT_DIR$/shoppingmicroservice/shoppingmicroservice.iml" filepath="$PROJECT_DIR$/shoppingmicroservice/shoppingmicroservice.iml" />
     </modules>
   </component>

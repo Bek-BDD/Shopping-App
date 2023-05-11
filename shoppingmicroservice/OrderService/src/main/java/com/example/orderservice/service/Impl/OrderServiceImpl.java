@@ -1,15 +1,21 @@
 package com.example.orderservice.service.Impl;
 
+import com.example.orderservice.exceptions.NotEnoughItemException;
 import com.example.orderservice.model.Order;
 import com.example.orderservice.model.OrderLineItem;
 import com.example.orderservice.repository.OrderRepo;
 import com.example.orderservice.service.OrderService;
 import com.example.orderservice.service.adapter.OrderLineItemMapper;
 import com.example.orderservice.service.adapter.OrderMapper;
+import com.example.orderservice.service.dto.InventoryDto;
 import com.example.orderservice.service.dto.OrderRequestDto;
 import com.example.orderservice.service.dto.OrderResponseDto;
+import com.example.orderservice.utility.Helper;
 import lombok.AllArgsConstructor;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,13 +28,21 @@ public class OrderServiceImpl implements OrderService {
     protected OrderMapper orderMapper;
     protected OrderLineItemMapper orderLineItemMapper;
 
+
     @Override
     public OrderResponseDto addOrder(OrderRequestDto orderDto) {
-        Order order = new Order();
-        order.setOrderNumber(UUID.randomUUID().toString());
-        List<OrderLineItem> orderLineItems = orderLineItemMapper.fromListOfOrderLineRequestDtoToListOfOrderLineDomain(orderDto.getOrderLineItems());
-        order.setOrderLineItems(orderLineItems);
-        return orderMapper.fromDomainToResponseDto(orderRepo.save(order));
+        try{
+            Helper.filterOrder(orderDto);
+            Order order = new Order();
+            order.setOrderNumber(UUID.randomUUID().toString());
+            List<OrderLineItem> orderLineItems = orderLineItemMapper.fromListOfOrderLineRequestDtoToListOfOrderLineDomain(orderDto.getOrderLineItems());
+            order.setOrderLineItems(orderLineItems);
+            return orderMapper.fromDomainToResponseDto(orderRepo.save(order));
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
@@ -44,14 +58,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDto updateOrder(OrderRequestDto orderDto) {
-        Optional<Order> oldOrder = orderRepo.findByOrderNumber(orderDto.getOrderNumber());
+        try {
+            Helper.filterOrder(orderDto);
+            Optional<Order> oldOrder = orderRepo.findByOrderNumber(orderDto.getOrderNumber());
 
-        if(oldOrder.isPresent()){
-            Order orderInDb=oldOrder.get();
-            orderInDb.setOrderLineItems(orderLineItemMapper.fromListOfOrderLineRequestDtoToListOfOrderLineDomain(orderDto.getOrderLineItems()));
-            return orderMapper.fromDomainToResponseDto(orderRepo.save(orderInDb));
-        }else{
-            return orderMapper.fromDomainToResponseDto(orderRepo.save(orderMapper.fromRequestDtoToDomain(orderDto)));
+            if (oldOrder.isPresent()) {
+                Order orderInDb = oldOrder.get();
+                orderInDb.setOrderLineItems(orderLineItemMapper.fromListOfOrderLineRequestDtoToListOfOrderLineDomain(orderDto.getOrderLineItems()));
+                return orderMapper.fromDomainToResponseDto(orderRepo.save(orderInDb));
+            } else {
+                return orderMapper.fromDomainToResponseDto(orderRepo.save(orderMapper.fromRequestDtoToDomain(orderDto)));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -69,4 +89,5 @@ public class OrderServiceImpl implements OrderService {
             return false;
         }
     }
+
 }
