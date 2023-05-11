@@ -2,12 +2,16 @@ package com.example.productservice.service.Impl;
 
 import com.example.productservice.model.Product;
 import com.example.productservice.repository.ProductRepo;
+import com.example.productservice.service.Dto.InventoryDto;
 import com.example.productservice.service.Dto.ProductRequestDto;
 import com.example.productservice.service.Dto.ProductResponseDto;
 import com.example.productservice.service.ProductService;
 import com.example.productservice.service.Adapter.ProductMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +21,17 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductRepo productRepo;
     protected ProductMapper productMapper;
+    private InventoryClientService inventoryClientService;
     @Override
     public ProductResponseDto addProduct(ProductRequestDto productDto) {
-
-        return productMapper.fromProductToResponseDto(productRepo.save(productMapper.formRequestDtoToProduct(productDto)));
+        try{
+            InventoryDto inventory = InventoryDto.builder().skuCode(productDto.getSkuCode()).build();
+            inventoryClientService.addInventory(inventory);
+            return productMapper.fromProductToResponseDto(productRepo.save(productMapper.formRequestDtoToProduct(productDto)));
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -60,5 +71,11 @@ public class ProductServiceImpl implements ProductService {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @FeignClient("InventoryService")
+    interface InventoryClientService{
+        @PostMapping("/inventory")
+        public InventoryDto addInventory(InventoryDto inventoryDto);
     }
 }
