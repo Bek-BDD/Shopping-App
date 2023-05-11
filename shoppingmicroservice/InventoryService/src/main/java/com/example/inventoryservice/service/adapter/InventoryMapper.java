@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper (componentModel = "spring")
 public interface InventoryMapper {
   //  InventoryMapper INSTANCE = Mappers.getMapper(InventoryMapper.class);
-
+    @Mapping(target = "quantity", source = "inventoryDto.quantity", defaultExpression = "100")
     public Inventory fromRequestDtoToInventoryDomain(InventoryRequestDto inventoryDto);
     public InventoryResponseDto formInventoryDomainToResponseDto(Inventory inventory);
     public List<Inventory> fromListOfRequestDtoToListOfInventoryDomain(List<InventoryRequestDto> inventoryDto);
